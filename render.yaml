@@ -1,0 +1,27 @@
+services:
+  - type: web_service
+    name: my-backend
+    env: node
+    build_command: npm install
+    start_command: npm start
+    branch: main
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: MONGODB_URI
+        value: mongodb+srv://brianmichaeladero:sundugweno@cluster0.cvl2fih.mongodb.net/Threads?retryWrites=true&w=majority&appName=Cluster0
+      - key: JWT_SECRET
+        value: jwtSecret
+      - key: CLOUDINARY_CLOUD_NAME
+        value: djega3cvv
+      - key: CLOUDINARY_API_KEY
+        value: 372266321518956
+      - key: CLOUDINARY_API_SECRET
+        value: B2Gy-FNcK9JUad06BgefRxZPEwI
+
+  - type: static_site
+    name: my-frontend
+    env: static
+    static_publish_path: frontend/build
+    build_command: npm run build --prefix frontend
+    branch: main

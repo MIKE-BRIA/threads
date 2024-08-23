@@ -8,10 +8,16 @@ import messageRoutes from "./routes/message.routes.js";
 import { v2 as cloudinary } from "cloudinary";
 import { app, server } from "./socket/socket.js";
 import path from "path";
+import cors from "cors";
 
 dotenv.config();
 mongooseConnect();
 // const app = express();
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://threads-m0a4.onrender.com",
+];
 
 const __dirname = path.resolve();
 
@@ -21,6 +27,19 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 //!middleware
 app.use(express.json({ limit: "50mb" })); //to parse json data in the req.body

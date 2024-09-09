@@ -17,6 +17,7 @@ mongooseConnect();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://threads-m0a4.onrender.com",
+  "http://localhost:3000",
 ];
 
 const __dirname = path.resolve();
@@ -28,9 +29,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+app.use(cors());
+
 app.use(
   cors({
     origin: function (origin, callback) {
+      // console.log("Origin:", origin);
       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {

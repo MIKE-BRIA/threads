@@ -26,7 +26,7 @@ const MessageInput = ({ setMessages }) => {
   const [messageText, setMessageText] = useState("");
   const showToast = useShowToast();
   const selectedConversation = useRecoilValue(selectedConversationAtom);
-  const [conversations, setConversations] = useRecoilState(conversationsAtom);
+  const [setConversations] = useRecoilState(conversationsAtom);
   const imageRef = useRef(null);
   const { onClose } = useDisclosure();
 
@@ -106,7 +106,7 @@ const MessageInput = ({ setMessages }) => {
             <ModalCloseButton />
             <ModalBody>
               <Flex mt={5} w={"full"}>
-                <Image src="https://images.unsplash.com/photo-1721332150382-d4114ee27eff?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0MXx8fGVufDB8fHx8fA%3D%3D" />
+                <Image src="" />
               </Flex>
               <Flex>
                 <IoSendSharp size={24} cursor={"pointer"} />

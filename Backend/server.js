@@ -17,6 +17,7 @@ mongooseConnect();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://threads-m0a4.onrender.com",
+  "http://localhost:3000",
 ];
 
 const __dirname = path.resolve();
@@ -28,9 +29,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+app.use(cors());
+
 app.use(
   cors({
     origin: function (origin, callback) {
+      // console.log("Origin:", origin);
       if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
         callback(null, true);
       } else {
@@ -55,10 +59,20 @@ app.use("/api/messages", messageRoutes);
 
 let PORT = process.env.PORT || 3000;
 
-if (process.env.NODE_ENV === "production") {
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+//   //react app
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+//   });
+// }
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "development"
+) {
   app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-  //react app
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
   });

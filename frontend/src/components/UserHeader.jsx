@@ -16,17 +16,15 @@ import { CgMoreO } from "react-icons/cg";
 import userAtom from "../atoms/userAtom";
 import { useRecoilValue } from "recoil";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+
 import useShowToast from "../hooks/useShowToast";
+import useFollowUnFollow from "../hooks/useFollowUnFollow";
 
 const UserHeader = ({ user }) => {
   // const toast = useToast();
   const showToast = useShowToast();
   const currentUser = useRecoilValue(userAtom); //logged in user
-  const [following, setFollowing] = useState(
-    user.followers.includes(currentUser?._id)
-  );
-  const [updating, setUpdating] = useState(false);
+  const { following, handleFollowUnfollow, updating } = useFollowUnFollow(user);
 
   function copyurl() {
     const currentUrl = window.location.href;
@@ -36,36 +34,36 @@ const UserHeader = ({ user }) => {
     });
   }
 
-  async function handleFollowUnfollow() {
-    if (!currentUser) return showToast("Please Login to follow");
+  // async function handleFollowUnfollow() {
+  //   if (!currentUser) return showToast("Please Login to follow");
 
-    if (updating) return;
-    setUpdating(true);
-    try {
-      const res = await fetch(`/api/users/follow/${user._id}`, {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-      });
+  //   if (updating) return;
+  //   setUpdating(true);
+  //   try {
+  //     const res = await fetch(`/api/users/follow/${user._id}`, {
+  //       method: "POST",
+  //       headers: { "content-type": "application/json" },
+  //     });
 
-      const data = await res.json();
-      if (data.error) return showToast("Error", data.error, "error");
+  //     const data = await res.json();
+  //     if (data.error) return showToast("Error", data.error, "error");
 
-      if (following) {
-        showToast(`Unfollowed ${user.name}`);
-        user.followers.pop(); //simulate removing from followers
-      } else {
-        showToast(`Followed ${user.name}`);
-        user.followers.push(currentUser?._id); //simulate adding to followers
-      }
+  //     if (following) {
+  //       showToast(`Unfollowed ${user.name}`);
+  //       user.followers.pop(); //simulate removing from followers
+  //     } else {
+  //       showToast(`Followed ${user.name}`);
+  //       user.followers.push(currentUser?._id); //simulate adding to followers
+  //     }
 
-      setFollowing(!following);
-      console.log(data);
-    } catch (error) {
-      showToast("Error", error, "error");
-    } finally {
-      setUpdating(false);
-    }
-  }
+  //     setFollowing(!following);
+  //     console.log(data);
+  //   } catch (error) {
+  //     showToast("Error", error, "error");
+  //   } finally {
+  //     setUpdating(false);
+  //   }
+  // }
 
   return (
     <>

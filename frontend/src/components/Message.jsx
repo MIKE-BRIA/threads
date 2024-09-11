@@ -1,17 +1,20 @@
-import { Avatar, Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Image, Skeleton, Text } from "@chakra-ui/react";
 import { useRecoilValue } from "recoil";
 import { selectedConversationAtom } from "../atoms/messagesAtom";
 import userAtom from "../atoms/userAtom";
 import { BsCheck2All } from "react-icons/bs";
+import { useState } from "react";
 
 const Message = ({ ownMessage, message }) => {
   const selectedConversation = useRecoilValue(selectedConversationAtom);
   const user = useRecoilValue(userAtom);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <>
       {ownMessage ? (
         <Flex gap={2} alignSelf={"flex-end"}>
-          {false && (
+          {message.text && (
             <Flex bg={"green.800"} maxW={"350px"} p={1} borderRadius={"md"}>
               <Text color={"white"}>{message.text}</Text>
               <Box
@@ -24,16 +27,28 @@ const Message = ({ ownMessage, message }) => {
               </Box>
             </Flex>
           )}
-          {true && (
+          {message.img && (
             <Flex mt={5} w={"200px"}>
               <Image
-                src="https://images.unsplash.com/photo-1721332150382-d4114ee27eff?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0MXx8fGVufDB8fHx8fA%3D%3D"
+                src={message.img}
+                hidden={!imgLoaded}
+                onLoad={() => setImgLoaded(true)}
                 alt="Message image"
                 borderRadius={4}
               />
+              {!imgLoaded && <Skeleton w={"200px"} h={"200px"} />}
+              {imgLoaded && (
+                <Box
+                  alignSelf={"flex-end"}
+                  ml={1}
+                  color={message.seen ? "blue.400" : ""}
+                  fontWeight={"bold"}
+                >
+                  <BsCheck2All size={16} />
+                </Box>
+              )}
             </Flex>
           )}
-
           <Avatar src={user.profilePic} name={user.username} w={7} h={7} />
         </Flex>
       ) : (
@@ -58,12 +73,13 @@ const Message = ({ ownMessage, message }) => {
           {message.img && (
             <Flex mt={5} w={"200px"}>
               <Image
-                src={
-                  "https://images.unsplash.com/photo-1721332150382-d4114ee27eff?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0MXx8fGVufDB8fHx8fA%3D%3D"
-                }
+                src={message.img}
+                hidden={!imgLoaded}
+                onLoad={() => setImgLoaded(true)}
                 alt="Message image"
                 borderRadius={4}
               />
+              {!imgLoaded && <Skeleton w={"200px"} h={"200px"} />}
             </Flex>
           )}
         </Flex>

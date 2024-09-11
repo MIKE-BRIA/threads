@@ -21,6 +21,7 @@ import { useState } from "react";
 import userAtom from "../atoms/userAtom";
 import { useSocket } from "../context/SocketContext";
 import { useRef } from "react";
+import messagesound from "../assets/sounds/message.wav";
 
 const MessageContainer = () => {
   const showToast = useShowToast();
@@ -38,6 +39,8 @@ const MessageContainer = () => {
         setMessages((prevMessages) => [...prevMessages, message]);
       }
 
+      const sound = new Audio(messagesound);
+      sound.play();
       setConversations((prevC) => {
         const updatedConversations = prevC.map((conversation) => {
           if (conversation._id === message.conversationId) {
